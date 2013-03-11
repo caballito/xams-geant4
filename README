@@ -20,6 +20,9 @@
  *      (e.g. look at only Xe and discard the rest)   *
  *    + cleaned up directory structure using the      *
  *      build directory                               *
+ * -- 11-03-2013: version control by git              *
+ *    + git project xams                              *
+ *    + no version numbers in directory names anymore *
  ******************************************************/
 
 -------------------------------------------------------
@@ -27,13 +30,13 @@
 -------------------------------------------------------
 The tarball contains:
  a) this README file
- b) xams_v1.2/
+ b) xams-code/
   - xams_sim.cc               main file
   - src/                      source files
   - include/                  header files
   - run/                      macros (see 3b and 3c)
   - CMakeLists.txt            cmake instructions
- c) xams_v1.2-build/
+ c) xams-build/
   - xams_sim                  executable
   - events.root               ROOT file with simulation results
   - output.log                output for all verbosities = 1
@@ -42,7 +45,7 @@ The tarball contains:
 	- CMakeCache.txt
   - CMakeFiles/               build files, shared objects etc.
   - run/                      copy of the macro directory
- d) xams_figures/
+ d) xams-figures/
 
 
 -------------------------------------------------------
@@ -50,16 +53,16 @@ The tarball contains:
 -------------------------------------------------------
 To compile the XAMS simulation first adjust the 
 CMAKE_MODULE_PATH in CMakeLists.txt.
-Then, from within xams_v1.2-build/, type
+Then, from within xams-build/, type
  > make clean
- > cmake ../xams_v1.2 (path to the source directory)
+ > cmake ../xams-code (path to the source directory)
  > make -jN xams_sim (with N the number of parallelisations)
 
 
 -------------------------------------------------------
 3) RUN THE CODE
 -------------------------------------------------------
-To run the XAMS simulation (from xams_v1.2-build/) type
+To run the XAMS simulation (from xams-build/) type
  > ./xams_sim -p run/preinit.mac -f run/runit.mac -n 10000
 
  a) The built-in switches are:
