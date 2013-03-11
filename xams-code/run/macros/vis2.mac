@@ -1,0 +1,17 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/vis/scene/create
+/vis/open VRML2FILE
+#/vis/open HepRepFile
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+/xe/gun/type Point
+/xe/gun/center 0 0 0 cm
+/xe/gun/angtype iso
+/xe/gun/particle e-
+/xe/gun/energytype Mono
+/xe/gun/energy 0.0001 keV

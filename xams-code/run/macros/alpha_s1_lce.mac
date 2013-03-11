@@ -1,0 +1,29 @@
+/control/execute macros/no_verbose.mac
+
+# detector parameters
+/Xe/detector/setLXeScintillation 1
+/Xe/detector/setTeflonReflectivity 0.9
+/Xe/detector/setLXeAbsorbtionLength 1 m
+/Xe/detector/setLXeRayScatterLength 30.0 cm
+
+/xe/gun/particle alpha
+/xe/gun/energytype Mono
+# scintillation yield is set at 1000/keV
+/xe/gun/energy 1 keV
+/xe/gun/angtype direction
+/xe/gun/type Volume
+
+#/xe/gun/shape Cylinder
+#/xe/gun/radius 60 cm
+#/xe/gun/halfz 70 cm
+#/xe/gun/center 0 0 0 cm
+#/xe/gun/confine LXe
+
+/xe/gun/shape Box
+/xe/gun/halfx 60 cm
+/xe/gun/halfy 5 cm
+/xe/gun/halfz 70 cm
+/xe/gun/center 0 0 0 cm
+/xe/gun/confine LXe
+
+/xe/gun/direction 0 0 1

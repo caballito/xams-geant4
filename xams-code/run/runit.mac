@@ -1,0 +1,18 @@
+/control/verbose 1
+/run/verbose 1
+/event/verbose 1
+/tracking/verbose 1
+/gps/verbose 1
+
+# Random seeding needs good care and administration.
+#
+/run/random/setRandomSeed 12361
+
+# Angular distribution.
+/gps/ang/type iso
+#/gps/direction 0 0 1.
+#
+/gps/particle gamma
+/gps/pos/type Point   
+/gps/pos/centre 0. 0. -28. cm
+/gps/energy 1000 keV

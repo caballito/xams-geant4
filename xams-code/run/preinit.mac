@@ -1,0 +1,22 @@
+#
+# GEANT4 - pre_init macro
+#
+# R. Schön 14-02-2013
+
+/run/physics/setHadronicModel    QGSP_BERT_HP
+/run/physics/setEMlowEnergyModel emlivermore
+/run/physics/setCerenkov         false
+#
+/run/physics/setTrackingCut   .001 mm
+/run/physics/setProductionCut 100. eV
+
+# Control over detector parameters.
+#
+# Liquid Xe level in the test chamber.
+/Xe/detector/setLiquidLevel 295. mm
+#
+# Number of layers around the lXe volume.
+# 0: only lXe, 1: chamber with gas and inner wall,
+# 2: insulation vacuum, 3: cryostat's outer wall.
+/Xe/detector/setNbrCryostatLayers 0
+

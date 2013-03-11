@@ -1,0 +1,16 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/xe/gun/type Volume
+/xe/gun/shape Cylinder
+/xe/gun/radius 60 cm
+/xe/gun/halfz 65 cm
+/xe/gun/center 0 0 0 cm
+/xe/gun/confine QUPIDWindow* QUPIDPhotocathode QUPIDBody* QUPIDBodyAluminiumCoating QUPIDAPD QUPIDBase* QUPIDBaseAluminiumCoating
+
+/xe/gun/energy 0 keV
+/xe/gun/particle ion
+/xe/gun/ion 19 40 0 0
+

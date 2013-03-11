@@ -1,0 +1,16 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/xe/gun/type Volume
+/xe/gun/shape Cylinder
+/xe/gun/radius 68 cm
+/xe/gun/halfz 9 cm
+/xe/gun/center 0 0 75 cm
+/xe/gun/confine Flange FlangePart1 FlangePart2 FlangePart3 FlangePart4
+
+/xe/gun/energy 0 keV
+/xe/gun/particle ion
+/xe/gun/ion 27 60 0 0
+

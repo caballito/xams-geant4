@@ -1,0 +1,8 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/verbose 1
+/material/verbose 0
+/process/setVerbose 0 all
+/process/eLoss/verbose 0
+/vis/verbose 0

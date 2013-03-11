@@ -1,0 +1,16 @@
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+# detector parameters
+/Xe/detector/setLXeScintillation 1
+/Xe/detector/setTeflonReflectivity 0.95
+/Xe/detector/setLXeAbsorbtionLength 1. m
+/Xe/detector/setLXeRayScatterLength 50.0 cm
+
+/xe/gun/type Point
+/xe/gun/center 0 0 0 mm
+/xe/gun/angtype iso
+/xe/gun/energy 10 keV
+/xe/gun/particle gamma

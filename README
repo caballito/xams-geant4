@@ -1,0 +1,140 @@
+/******************************************************
+ * XAMS Geant4 code by Auke-Pieter Colijn extended by *
+ * Rolf Schön.                                        *
+ * -------------------------------------------------- *
+ * Changelog:                                         *
+ * -xams_v1.0                                         *
+ *    + implementation of XAMS geometry               *
+ * -xams_v1.1                                         *
+ *    + XAMSDetectorConstruction.cc with              *
+ *      more precise dimensions according to drawings *
+ *    +	modular liquid Xe level through preinit.mac   *
+ *	    and XAMSDetectorMessenger                     *
+ *    + added the step length (= distance between 2   *
+ *      energy depositions) as parameter to the       *
+ *      XAMSEventData saved in events.root            *
+ * -xams_v1.2                                         *
+ *    + modular geometry: number of cryostat layers   *
+ *      around the innermost volume of liquid Xe      *
+ *      via preinit.mac and XAMSDetectorMessenger     *
+ *      (e.g. look at only Xe and discard the rest)   *
+ *    + cleaned up directory structure using the      *
+ *      build directory                               *
+ ******************************************************/
+
+-------------------------------------------------------
+1) CONTENT
+-------------------------------------------------------
+The tarball contains:
+ a) this README file
+ b) xams_v1.2/
+  - xams_sim.cc               main file
+  - src/                      source files
+  - include/                  header files
+  - run/                      macros (see 3b and 3c)
+  - CMakeLists.txt            cmake instructions
+ c) xams_v1.2-build/
+  - xams_sim                  executable
+  - events.root               ROOT file with simulation results
+  - output.log                output for all verbosities = 1
+  - Makefile
+  - cmake_install.cmake
+	- CMakeCache.txt
+  - CMakeFiles/               build files, shared objects etc.
+  - run/                      copy of the macro directory
+ d) xams_figures/
+
+
+-------------------------------------------------------
+2) COMPILATION
+-------------------------------------------------------
+To compile the XAMS simulation first adjust the 
+CMAKE_MODULE_PATH in CMakeLists.txt.
+Then, from within xams_v1.2-build/, type
+ > make clean
+ > cmake ../xams_v1.2 (path to the source directory)
+ > make -jN xams_sim (with N the number of parallelisations)
+
+
+-------------------------------------------------------
+3) RUN THE CODE
+-------------------------------------------------------
+To run the XAMS simulation (from xams_v1.2-build/) type
+ > ./xams_sim -p run/preinit.mac -f run/runit.mac -n 10000
+
+ a) The built-in switches are:
+	-v {vrml,opengl}: visualisation; specify the graphics engine
+	-f <file name>: macro file
+	-o <file name>: data file
+	-p <file name>: preinit macro
+	-n <number of events>: number of events to simulate
+	-i: interactive
+
+ b) The preinit macro allows to set:
+  - the physics lists, e.g. for the hadronic model, for the
+	  low energetic EM model, and if to	include Cerenkov effects,
+	- the liquid Xe level inside the test chamber,
+	- how many layers of the cryostat are constructed around the
+	  liquid Xe volume (to discard the rest if only interested in
+		the physics of Xe).
+
+ c) The runit macro sets:
+  - the verbosity levels of the subprocesses of the run manager,
+  - the seed for the random number generator,
+  - parameters for the particle gun (e.g. position,
+    opening angle, particle type, its energy).
+
+
+-------------------------------------------------------
+4) RESULTS
+-------------------------------------------------------
+The file events.root contains subdirectories with
+information about and results of the simulation run:
+- events
+	--> TTree events
+		'-> eventid               ID of the event
+		'-> etot                  total energy per event
+		'-> nsteps                number of steps calculated per event
+		'-> trackid               ID of any track
+		'-> type -> data()        particle type of any track
+		'-> parentid              ID of the parent track
+		'-> parenttype -> data()  particle type of the parent track
+		'-> creaproc -> data()    creation process of any particle
+		'-> edproc -> data()      process leading to an energy deposition
+		'-> xp                    x position of energy deposition
+		'-> yp                    y
+		'-> zp                    z
+		'-> ed                    deposited energy
+		'-> time                  time of energy deposition
+		'-> steplen               length of a step, distance between 2 energy depositions
+		'-> type_pri -> data()    particle type of primary particle
+		'-> xp_pri                x position of primary particle
+		'-> yp_pri                y
+		'-> zp_pri                z
+		'-> e_pri                 energy of primary particle
+		'-> w_pri                 weight of primary particle
+- detector
+	--> materials               info about every material of the detector
+		'-> G4_<material>
+			'-> Temperature
+			'-> Density
+			'-> Pressure
+			'-> f_<material>
+- physics                     histograms of process cross section
+	--> electromagnetic
+		'-> G4_<material>_compt
+		'-> G4_<material>_phot
+		'-> G4_<material>_conv
+	--> hadronic                
+		'-> G4_<material>_elastic
+		'-> G4_<material>_inelastic
+		'-> G4_<material>_capture
+		'-> G4_<material>_fission
+- generator                   parameters of the event generator          
+	--> SourceType
+	--> SourceIntensity
+	--> naccept
+	--> _cost
+	--> _energy
+
+
