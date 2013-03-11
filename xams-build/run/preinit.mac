@@ -7,7 +7,7 @@
 /run/physics/setEMlowEnergyModel emlivermore
 /run/physics/setCerenkov         false
 #
-/run/physics/setTrackingCut   .001 mm
+/run/physics/setTrackingCut   1. mm
 /run/physics/setProductionCut 100. eV
 
 # Control over detector parameters.

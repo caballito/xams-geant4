@@ -29,7 +29,8 @@ int compare(Int_t nbrFiles, TString fName[]){
 	TTree* tree[nFiles] ;
 	//
 	TH1F* steplength[nFiles] ;
-	TLegend* leg = new TLegend(0.6,0.8,0.9,0.9) ;
+	TLegend* leg = new TLegend(0.7,0.6,0.9,0.9) ;
+	leg->SetFillColor(0) ;
 	
 	for (Int_t i=0; i<nFiles; i++){
 		// Read in the files.
