@@ -1,6 +1,8 @@
 /****************************************************
  * Read multiple event trees of G4 XAMS simulations *
  * to compare them.                                 *
+ * Make histograms for interesting parameters and   *
+ * save them in an output file.                     *
  *                       --  Rolf Schön, March 2013 *
  ****************************************************/
 
@@ -47,7 +49,7 @@ int compare(Int_t nbrFiles, TString fName[]){
 	// For later use.
 	TString outName("output.root") ;
 	TFile out(outName,"recreate") ;
-	TCanvas can1("can1") ;
+	TCanvas can1("can1"), can2("can2"), can3("can3") ;
 	can1.cd() ;
 
 	for (Int_t i=0; i<nFiles; i++){
@@ -78,26 +80,30 @@ int compare(Int_t nbrFiles, TString fName[]){
 	can1.Update() ;
 	//can1.WaitPrimitive() ;
 	//
-	TCanvas can2("can2") ;
-	can2.Divide(1,2) ;
 	for (Int_t j=0;j<2;j++){
-		can2.cd(j+1) ;
+		if (j==0) can2.cd() ;
+		if (j==1) can3.cd() ;
 		depoproc[0][j]->Draw() ;
 		for (Int_t i=1; i<nFiles; i++)
 			depoproc[i][j]->Draw("same") ;
 		leg[j+1]->Draw("same") ;
 	}
 	can2.Update() ;
-	can2.WaitPrimitive() ;
+	can3.Update() ;
 
 	out.cd() ;
-	can1.Write() ;
-	can2.Write() ;
-	cout << "Histograms written into " << outName << endl ;
+	for (Int_t i=0;i<nFiles;i++){
+		steplength[i]->Write() ;
+		for (Int_t j=0;j<2;j++)
+			depoproc[i][j]->Write() ;
+	}
+	cout << "++ Histograms written into " << outName << endl ;
 	out.Close() ;
 
+	cout << "++ Double-click each canvas to finish." << endl ;
 	can1.WaitPrimitive() ;
 	can2.WaitPrimitive() ;
+	can3.WaitPrimitive() ;
 	return 0 ;
 }
 
