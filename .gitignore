@@ -1,0 +1,12 @@
+# Git ignores files matching the following.
+# Shared objects created by compilation in ROOT.
+*.so
+*.d
+# Swap files when still open in vim.
+*.swp
+# Object files.
+*.o
+*.out
+*.bin
+results/
+
