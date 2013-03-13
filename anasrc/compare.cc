@@ -10,20 +10,14 @@
 #include "TString.h"
 #include "TFile.h"
 #include "TTree.h"
-#include "TEntryList.h"
 #include <iostream>
 #include "TH1.h"
 #include "TH2.h"
-#include "TF1.h"
-#include "TMath.h"
-#include "TLine.h"
-#include "TCanvas.h"
-#include "TLegend.h"
 #include <sstream>
 using namespace std ;
 
-int makeSteplengthHists(const int, Int_t, TH1F*[], TTree*[], TLegend*[]) ;
-int makeEdprocHists(const int, Int_t, TH1D***, TTree*[], TLegend*[]) ;
+int makeSteplengthHists(const int, Int_t, TH1F*[], TTree*[]) ;
+int makeEdprocHists(const int, Int_t, TH1D***, TTree*[]) ;
 
 int compare(Int_t nbrFiles, TString fName[]){
 	// Navigation to the trees.
@@ -31,26 +25,13 @@ int compare(Int_t nbrFiles, TString fName[]){
 	TFile* f[nFiles] ;
 	TDirectoryFile* dir[nFiles] ;
 	TTree* tree[nFiles] ;
+
 	// Histograms for the parameters to compare.
 	TH1F* steplength[nFiles] ;
 	TH1D*** depoproc ;
 	depoproc = new TH1D**[nFiles] ;	// For e- and gamma.
 	for (Int_t i=0; i<nFiles; i++)
 		depoproc[i] = new TH1D*[2] ;
-	//
-	TLegend* leg[3] ;	// One for every histogram.
-	leg[0] = new TLegend(0.7,0.6,0.9,0.9) ;
-	leg[0]->SetFillColor(0) ;
-	leg[1] = new TLegend(0.7,0.6,0.9,0.9) ;
-	leg[1]->SetFillColor(0) ;
-	leg[2] = new TLegend(0.7,0.6,0.9,0.9) ;
-	leg[2]->SetFillColor(0) ;
-
-	// For later use.
-	TString outName("output.root") ;
-	TFile out(outName,"recreate") ;
-	TCanvas can1("can1"), can2("can2"), can3("can3") ;
-	can1.cd() ;
 
 	for (Int_t i=0; i<nFiles; i++){
 		// Read in the files.
@@ -65,32 +46,17 @@ int compare(Int_t nbrFiles, TString fName[]){
 		dir[i]->cd() ;
 		tree[i] = dynamic_cast<TTree*>(dir[i]->Get("events")) ;
 		
-		if ( makeSteplengthHists(nFiles, i, steplength, tree, leg) )
+		// Make histograms.
+		if ( makeSteplengthHists(nFiles, i, steplength, tree) )
 			cout << "EE Something went wrong with the step length histograms."
 				<< endl ;
-
-		if ( makeEdprocHists(nFiles, i, depoproc, tree, leg) )
+		if ( makeEdprocHists(nFiles, i, depoproc, tree) )
 			cout << "EE Something went wrong with the energy deposition process histograms." << endl ;
 	}
 
-	steplength[0]->Draw() ;
-	for (Int_t i=1; i<nFiles; i++)
-		steplength[i]->Draw("same") ;
-	leg[0]->Draw("same") ;
-	can1.Update() ;
-	//can1.WaitPrimitive() ;
-	//
-	for (Int_t j=0;j<2;j++){
-		if (j==0) can2.cd() ;
-		if (j==1) can3.cd() ;
-		depoproc[0][j]->Draw() ;
-		for (Int_t i=1; i<nFiles; i++)
-			depoproc[i][j]->Draw("same") ;
-		leg[j+1]->Draw("same") ;
-	}
-	can2.Update() ;
-	can3.Update() ;
-
+	// Save all histograms.
+	TString outName("output.root") ;
+	TFile out(outName,"recreate") ;
 	out.cd() ;
 	for (Int_t i=0;i<nFiles;i++){
 		steplength[i]->Write() ;
@@ -100,15 +66,12 @@ int compare(Int_t nbrFiles, TString fName[]){
 	cout << "++ Histograms written into " << outName << endl ;
 	out.Close() ;
 
-	cout << "++ Double-click each canvas to finish." << endl ;
-	can1.WaitPrimitive() ;
-	can2.WaitPrimitive() ;
-	can3.WaitPrimitive() ;
 	return 0 ;
 }
 
-int makeSteplengthHists(const int nFiles, Int_t i, TH1F* steplength[],
-		TTree* tree[], TLegend* leg[]){
+
+int makeSteplengthHists(const int nFiles, Int_t i,
+		TH1F* steplength[], TTree* tree[]){
 	stringstream dummyName[nFiles] ;
 	stringstream dummyTarget[nFiles] ;
 	TString histName[nFiles] ;
@@ -127,14 +90,12 @@ int makeSteplengthHists(const int nFiles, Int_t i, TH1F* steplength[],
 	cout << "++ Drawing " << histName[i] << " with " 
 		<< steplength[i]->GetEntries() << " entries." << endl ;
 
-	steplength[i]->SetFillColor(19-i) ;
-	leg[0]->AddEntry(steplength[i],histName[i],"f") ;
-
 	return 0 ;
 }
 
-int makeEdprocHists(const int nFiles, Int_t i, TH1D*** depoproc,
-		TTree* tree[], TLegend* leg[]){
+
+int makeEdprocHists(const int nFiles, Int_t i,
+		TH1D*** depoproc, TTree* tree[]){
 	stringstream dummyName[nFiles][2] ;
 	stringstream dummyTarget[nFiles][2] ;
 	TString histName[nFiles][2] ;
@@ -159,13 +120,6 @@ int makeEdprocHists(const int nFiles, Int_t i, TH1D*** depoproc,
 	depoproc[i][1] = new TH1D(histName[i][1],
 		"electron;energy deposition process;entries",5,0,5) ;
 	tree[i]->Draw(drawTarget[i][1],"type.data()==\"e-\" ") ;
-	//cout << "++ Drawing " << histName[i] << " with " 
-	//	<< steplength[i]->GetEntries() << " entries." << endl ;
-
-	depoproc[i][0]->SetFillColor(19-i) ;
-	leg[1]->AddEntry(depoproc[i][0],histName[i][0],"f") ;
-	depoproc[i][1]->SetFillColor(19-i) ;
-	leg[2]->AddEntry(depoproc[i][1],histName[i][1],"f") ;
 
 	return 0 ;
 }
