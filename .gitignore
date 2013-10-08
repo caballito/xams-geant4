@@ -5,6 +5,7 @@
 # Swap files when still open in vim.
 *.swp
 # Object files.
+xams-build/CMakeFiles/
 *.o
 *.out
 *.bin
