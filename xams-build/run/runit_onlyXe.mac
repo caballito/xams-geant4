@@ -1,8 +1,8 @@
-/control/verbose 0
-/run/verbose 1 
-/event/verbose 0
+/control/verbose 1
+/run/verbose 1
+/event/verbose 1
 /tracking/verbose 0
-/gps/verbose 0
+/gps/verbose 1
 
 # Random seeding needs good care and administration.
 #
@@ -17,4 +17,4 @@
 /gps/pos/type Point
 # lXe volume centred at (0,0,0) and FullZ = 50 cm.
 /gps/pos/centre 0. 0. -30. cm
-/gps/energy 350 keV
+/gps/energy 1000 keV

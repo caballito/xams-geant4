@@ -32,6 +32,8 @@ XAMSHit::XAMSHit(const XAMSHit &hXAMSHit):G4VHit()
 	m_dTime = hXAMSHit.m_dTime;
 	// Include step length.
 	m_dStepLength = hXAMSHit.m_dStepLength;
+	// Include angle between directions before and after step.
+	m_dAngle = hXAMSHit.m_dAngle ;
 }
 
 const XAMSHit &
@@ -49,6 +51,8 @@ XAMSHit::operator=(const XAMSHit &hXAMSHit)
 	m_dTime = hXAMSHit.m_dTime;
 	// Include step length.
 	m_dStepLength = hXAMSHit.m_dStepLength ;
+	// Include angle between directions before and after step.
+	m_dAngle = hXAMSHit.m_dAngle ;
 	
 	return *this;
 }

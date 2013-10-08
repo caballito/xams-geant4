@@ -32,7 +32,8 @@ public:
 	void SetEnergyDeposited(G4double dEnergyDeposited) { m_dEnergyDeposited = dEnergyDeposited; };
 	void SetKineticEnergy(G4double dKineticEnergy) { m_dKineticEnergy = dKineticEnergy; };
 	void SetTime(G4double dTime) { m_dTime = dTime; };
-	void SetStepLength(G4double dStepLength) { m_dStepLength = dStepLength; };
+	void SetStepLength(G4double dStepLength) { m_dStepLength = dStepLength; } ;
+	void SetAngle(G4double dAngle) { m_dAngle = dAngle ; } ;
 
 	G4int GetTrackId() { return m_iTrackId; };
 	G4int GetParentId() { return m_iParentId; };
@@ -45,19 +46,21 @@ public:
 	G4double GetKineticEnergy() { return m_dKineticEnergy; };      
 	G4double GetTime() { return m_dTime; };      
 	G4double GetStepLength() { return m_dStepLength ; };      
+	G4double GetAngle() { return m_dAngle ; } ;
 
 private:
-	G4int m_iTrackId;
-	G4int m_iParentId;
-	G4String *m_pParticleType;
-	G4String *m_pParentType;
-	G4String *m_pCreatorProcess;
-	G4String *m_pDepositingProcess;
-	G4ThreeVector m_hPosition;
-	G4double m_dEnergyDeposited;
-	G4double m_dKineticEnergy;
-	G4double m_dTime;
-	G4double m_dStepLength;
+	G4int m_iTrackId ;
+	G4int m_iParentId ;
+	G4String *m_pParticleType ;
+	G4String *m_pParentType ;
+	G4String *m_pCreatorProcess ;
+	G4String *m_pDepositingProcess ;
+	G4ThreeVector m_hPosition ;
+	G4double m_dEnergyDeposited ;
+	G4double m_dKineticEnergy ;
+	G4double m_dTime ;
+	G4double m_dStepLength ;
+	G4double m_dAngle ;
 };
 
 typedef G4THitsCollection<XAMSHit> XAMSHitsCollection;

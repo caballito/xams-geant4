@@ -110,6 +110,7 @@ information about and results of the simulation run:
 		'-> ed                    deposited energy
 		'-> time                  time of energy deposition
 		'-> steplen               length of a step, distance between 2 energy depositions
+		'-> angle                 angle between directions before and after a step
 		'-> type_pri -> data()    particle type of primary particle
 		'-> xp_pri                x position of primary particle
 		'-> yp_pri                y

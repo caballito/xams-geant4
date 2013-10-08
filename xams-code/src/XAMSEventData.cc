@@ -21,6 +21,8 @@ XAMSEventData::XAMSEventData()
 	m_pTime = new vector<float>;
 	// Add step length between two processes.
 	m_pStepLength = new vector<float> ;
+	// Add angle between directions before and after a step.
+	m_pAngle = new vector<float> ;
 
 	m_pPrimaryParticleType = new vector<string>;
 	m_fPrimaryX = 0.;
@@ -44,7 +46,8 @@ XAMSEventData::~XAMSEventData()
 	delete m_pEnergyDeposited;
 	delete m_pKineticEnergy;
 	delete m_pTime;
-	delete m_pStepLength;
+	delete m_pStepLength ;
+	delete m_pAngle ;
 
 	delete m_pPrimaryParticleType;
 }
@@ -68,7 +71,8 @@ XAMSEventData::Clear()
 	m_pEnergyDeposited->clear();
 	m_pKineticEnergy->clear();
 	m_pTime->clear();
-	m_pStepLength->clear();
+	m_pStepLength->clear() ;
+	m_pAngle->clear() ;
 
 	m_pPrimaryParticleType->clear();
 	m_fPrimaryX = 0.;

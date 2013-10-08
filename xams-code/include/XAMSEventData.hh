@@ -33,6 +33,7 @@ public:
 	vector<float> *m_pKineticEnergy;	// Particle's kinetic energy after the step.
 	vector<float> *m_pTime;	// Time of the step.
 	vector<float> *m_pStepLength ;	// Spatial distance of the step.
+	vector<float> *m_pAngle ;	// Angle between directions before and after the step.
 	vector<string> *m_pPrimaryParticleType;	// Type of primary particle.
 	float m_fPrimaryX;	// Position of the primary particle.
 	float m_fPrimaryY;

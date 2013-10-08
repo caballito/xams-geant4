@@ -79,6 +79,7 @@ XAMSAnalysisManager::BeginOfRun(const G4Run *)
   m_pTree->Branch("ekin",      "vector<float>", &m_pEventData->m_pKineticEnergy);
   m_pTree->Branch("time",      "vector<float>", &m_pEventData->m_pTime);
   m_pTree->Branch("steplen",   "vector<float>", &m_pEventData->m_pStepLength);
+  m_pTree->Branch("angle",     "vector<float>", &m_pEventData->m_pAngle);
   
   m_pTree->Branch("type_pri",  "vector<string>",&m_pEventData->m_pPrimaryParticleType);
   m_pTree->Branch("xp_pri", &m_pEventData->m_fPrimaryX, "xp_pri/F");
@@ -191,6 +192,7 @@ XAMSAnalysisManager::EndOfEvent(const G4Event *pEvent)
 	      m_pEventData->m_pKineticEnergy->push_back(pHit->GetKineticEnergy()/keV);
 	      m_pEventData->m_pTime->push_back(pHit->GetTime()/second);
 	      m_pEventData->m_pStepLength->push_back(pHit->GetStepLength()/mm);
+	      m_pEventData->m_pAngle->push_back(pHit->GetAngle()/degree);
         
 	      iNbSteps++;
 	    }

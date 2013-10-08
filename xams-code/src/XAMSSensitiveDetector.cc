@@ -63,12 +63,20 @@ G4bool XAMSSensitiveDetector::ProcessHits(G4Step* pStep, G4TouchableHistory*) {
 	pHit->SetKineticEnergy(pTrack->GetKineticEnergy()) ;
 	pHit->SetTime(pTrack->GetGlobalTime()) ;
 	// Include the step length.
-	G4ThreeVector dPreStepPos = pStep->GetPreStepPoint()->GetPosition() ;
-	G4ThreeVector dPostStepPos = pStep->GetPostStepPoint()->GetPosition() ;
-	G4ThreeVector dDistance = dPostStepPos - dPreStepPos ;
+	// Already a function in G4: G4Step::GetStepLength()
+	//G4ThreeVector dPreStepPos = pStep->GetPreStepPoint()->GetPosition() ;
+	//G4ThreeVector dPostStepPos = pStep->GetPostStepPoint()->GetPosition() ;
+	//G4ThreeVector dDistance = dPostStepPos - dPreStepPos ;
 	// Calculate the magnitude, i.e. the absolute value, of the distance.
-	G4double dLength = dDistance.mag() ;
-	pHit->SetStepLength( dLength ) ;
+	//G4double dLength = dDistance.mag() ;
+	//pHit->SetStepLength( dLength ) ;
+	pHit->SetStepLength(pStep->GetStepLength()) ;
+	// Include angle between previous and new step.
+	G4ThreeVector dPreDirection = pStep->GetPreStepPoint()->GetMomentumDirection() ;
+	G4ThreeVector dPostDirection = pStep->GetPostStepPoint()->GetMomentumDirection() ;
+	// Calculate angle between direction unit vectors.
+	G4double dAngle = std::acos(dPreDirection * dPostDirection) ;
+	pHit->SetAngle(dAngle) ;
 
 	m_pHitsCollection->insert(pHit) ;
 

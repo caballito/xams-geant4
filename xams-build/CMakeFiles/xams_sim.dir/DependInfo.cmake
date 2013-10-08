@@ -25,15 +25,15 @@ SET(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 SET(CMAKE_TARGET_DEFINITIONS
-  "G4_STORE_TRAJECTORY"
-  "G4VERBOSE"
-  "G4UI_USE"
-  "G4VIS_USE"
-  "G4UI_USE_TCSH"
   "G4INTY_USE_QT"
+  "G4UI_USE"
   "G4UI_USE_QT"
-  "G4VIS_USE_OPENGLQT"
+  "G4UI_USE_TCSH"
+  "G4VERBOSE"
+  "G4VIS_USE"
   "G4VIS_USE_OPENGL"
+  "G4VIS_USE_OPENGLQT"
+  "G4_STORE_TRAJECTORY"
   )
 
 # Targets to which this target links.
