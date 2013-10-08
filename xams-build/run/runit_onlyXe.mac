@@ -17,4 +17,4 @@
 /gps/pos/type Point
 # lXe volume centred at (0,0,0) and FullZ = 50 cm.
 /gps/pos/centre 0. 0. -30. cm
-/gps/energy 750 keV
+/gps/energy 350 keV
