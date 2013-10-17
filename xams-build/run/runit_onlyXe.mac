@@ -1,8 +1,8 @@
 /control/verbose 1
-/run/verbose 1
-/event/verbose 1
+/run/verbose 0
+/event/verbose 0
 /tracking/verbose 0
-/gps/verbose 1
+/gps/verbose 0
 
 # Random seeding needs good care and administration.
 #
