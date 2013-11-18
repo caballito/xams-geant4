@@ -88,6 +88,12 @@ G4VPhysicalVolume* XAMSDetectorConstruction::Construct() {
 	G4cout << "++ Constructing the liquid Xe volume..." ;
 	ConstructLiquid() ;
 	G4cout << " Done." << G4endl ;
+	//
+	if (pNbrCryostatLayers > 0){
+		G4cout << "++ Constructing the TPC..." ;
+		ConstructTpc() ;
+		G4cout << " Done." << G4endl ;
+	}
     
   // Info on our geometry.
   //PrintGeometryInformation() ;
@@ -137,6 +143,12 @@ void XAMSDetectorConstruction::DefineMaterials() {
 	//----- liquid Argon -------
   pNistManager->FindOrBuildMaterial("G4_lAr") ;
   
+	//----- Copper -------------
+	pNistManager->FindOrBuildMaterial("G4_Cu") ;
+
+	//----- Teflon -------------
+	pNistManager->FindOrBuildMaterial("G4_TEFLON") ;
+
   //----- Vacuum -------------
   G4Material* Vacuum = new G4Material("Vacuum", 1.e-20*g/cm3, 2, kStateGas) ;
   Vacuum->AddElement(N, 0.755) ;
@@ -366,19 +378,86 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 		m_pLiq_phys = new G4PVPlacement(0,
 				G4ThreeVector(),m_pLiq_log,
 				"LiquidXenon",m_pLab_log,false,0) ;
-
+/*
   // Make the lXe the sensitive detector.
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer() ;
   XAMSSensitiveDetector* pLiq_SD = new XAMSSensitiveDetector("XAMS/lXe") ;
   pSDManager->AddNewDetector(pLiq_SD) ;
   m_pLiq_log->SetSensitiveDetector(pLiq_SD) ;
-	
+	*/
 	// Visibility attributes.
 	G4Colour hLiqColor(0,0.4,1.,0) ;
 	G4VisAttributes* pLiqVisAtt = new G4VisAttributes(hLiqColor) ;
 	pLiqVisAtt->SetVisibility(true) ;
 	m_pLiq_log->SetVisAttributes(pLiqVisAtt) ;
 }
+
+//================= TPC ==========================
+void XAMSDetectorConstruction::ConstructTpc() {
+	// Dimensions.
+	const G4double dTeflonHalfZ = 0.5 * GetGeometryParameter("liquidLevel") - 1. * cm ;
+	const G4double dTeflonOuterRadius = 74. * mm ;
+	const G4double dTeflonInnerRadius = 30. * mm ;
+	//
+	const G4double dElectrodeHalfZ = 1. * mm ;
+	const G4double dElectrodeOuterRadius = 55. * mm ;
+	const G4double dElectrodeInnerRadius = 45. * mm ;
+	//
+	const G4double dMeshHalfZ = 1. * mm ;
+	const G4double dMeshRadius = 55. * mm ;
+
+	// Position inside the Xe volume. TODO
+	
+
+	// Material.
+	G4Material* Teflon = G4Material::GetMaterial("G4_TEFLON") ;
+	G4Material* Cu = G4Material::GetMaterial("G4_Cu") ;
+	G4Material* Steel = G4Material::GetMaterial("Steel") ;
+	G4Material* lXe = G4Material::GetMaterial("G4_lXe") ;
+
+	// Volumes.
+	// Teflon.
+	G4Tubs* pTeflonCyl = new G4Tubs("Teflon_tubs",0.*cm,
+			dTeflonOuterRadius,dTeflonHalfZ,0.*deg,360.*deg) ;
+	m_pTeflon_log = new G4LogicalVolume(pTeflonCyl,Teflon,"TeflonCylinder") ;
+	m_pTeflon_phys = new G4PVPlacement(0,G4ThreeVector(),
+			m_pTeflon_log,"TeflonStructure",m_pLiq_log,false,0) ;
+	// Electrode(s).
+	G4Tubs* pElectrode = new G4Tubs("Cu_tubs",dElectrodeInnerRadius,
+			dElectrodeOuterRadius,dElectrodeHalfZ,0.*deg,360.*deg) ;
+	m_pElectrode_log = new G4LogicalVolume(pElectrode,Cu,"ElectrodeRing") ;
+	// TODO: Multiply and place evenly over drift length.
+	m_pElectrode_phys = new G4PVPlacement(0,G4ThreeVector(),
+			m_pElectrode_log,"CuRing",m_pTeflon_log,false,0) ;
+	// Mesh(es).
+	G4Tubs* pMesh = new G4Tubs("Steel_tubs",0.*cm,
+			dMeshRadius,dMeshHalfZ,0.*deg,360.*deg) ;
+	m_pMesh_log = new G4LogicalVolume(pMesh,Steel,"SteelMesh") ;
+	// TODO: put at correct height, double and divide into lXe.
+	m_pMesh_phys = new G4PVPlacement(0,
+			G4ThreeVector(0.*cm,0.*cm,dTeflonHalfZ - 5.*mm),
+			m_pMesh_log,"Mesh",m_pTeflon_log,false,0) ;
+	// Inner lXe.
+	G4Tubs* pTpcLiq_tubs = new G4Tubs("Liq_tubs",0.*cm,
+			dTeflonInnerRadius,1.5 * dTeflonHalfZ,0.*deg,360.*deg) ;
+	m_pTpcLiq_log = new G4LogicalVolume(pTpcLiq_tubs,lXe,"InnerLiquidVolume") ;
+	m_pTpcLiq_phys = new G4PVPlacement(0,G4ThreeVector(),m_pTpcLiq_log,
+				"InnerLiquidXenon",m_pTeflon_log,false,0) ;
+
+  // Make the lXe the sensitive detector.
+  G4SDManager* pSDManager = G4SDManager::GetSDMpointer() ;
+  XAMSSensitiveDetector* pTpcLiq_SD = new XAMSSensitiveDetector("XAMS/lXe") ;
+  pSDManager->AddNewDetector(pTpcLiq_SD) ;
+  m_pTpcLiq_log->SetSensitiveDetector(pTpcLiq_SD) ;
+
+}
+
+//================= PMT ==========================
+void XAMSDetectorConstruction::ConstructPmt() {
+	// Nothing yet.
+
+}
+
 
 void XAMSDetectorConstruction::PrintGeometryInformation() {
 	// Nothing here.

@@ -18,5 +18,5 @@
 # Number of layers around the lXe volume.
 # 0: only lXe, 1: chamber with gas and inner wall,
 # 2: insulation vacuum, 3: cryostat's outer wall.
-/Xe/detector/setNbrCryostatLayers 0
+/Xe/detector/setNbrCryostatLayers 3
 

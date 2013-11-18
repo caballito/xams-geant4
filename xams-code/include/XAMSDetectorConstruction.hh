@@ -51,6 +51,8 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
 		void ConstructInsulationVacuum() ;
 		void ConstructChamber() ;
 		void ConstructLiquid() ;
+		void ConstructTpc() ;
+		void ConstructPmt() ;
 		void CheckOverlapping();
 		void PrintGeometryInformation();
 		//
@@ -66,6 +68,11 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
 		G4LogicalVolume* m_pCryostatInnerWall_log ;
 		G4LogicalVolume* m_pLiq_log ;
 		G4LogicalVolume* m_pGas_log ;
+		G4LogicalVolume* m_pTeflon_log ;
+		G4LogicalVolume* m_pElectrode_log ;
+		G4LogicalVolume* m_pMesh_log ;
+		G4LogicalVolume* m_pTpcLiq_log ;
+		//G4LogicalVolume* m_pPmt_log ;
 
   	// Physical volumes.
 	  G4VPhysicalVolume* m_pLab_phys ;
@@ -74,6 +81,11 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
   	G4VPhysicalVolume* m_pCryostatInnerWall_phys ;
   	G4VPhysicalVolume* m_pLiq_phys ;
   	G4VPhysicalVolume* m_pGas_phys ;
+  	G4VPhysicalVolume* m_pTeflon_phys ;
+  	G4VPhysicalVolume* m_pElectrode_phys ;
+  	G4VPhysicalVolume* m_pMesh_phys ;
+  	G4VPhysicalVolume* m_pTpcLiq_phys ;
+  	//G4VPhysicalVolume* m_pPmt_phys ;
    
 	  static map<G4String, G4double> m_hGeometryParameters ;
 
