@@ -190,16 +190,16 @@ void XAMSDetectorConstruction::DefineGeometryParameters() {
   m_hGeometryParameters["innerWallThickness"] = 5.0 * mm ;
 	
 	// Chamber dimensions. The inside of the chamber of the inner
-	// vessel is 330 mm high, thus limiting the liquid level.
-	// The difference between the set liquid level and 330 mm 
+	// vessel is 340 mm high, thus limiting the liquid level.
+	// The difference between the set liquid level and 340 mm 
 	// will be assigned to the gaseous gap.
-	const G4double pChamberHeight = 330. * mm ;	// Total height (not halfZ!).
+	const G4double pChamberHeight = 340. * mm ;	// Total height (not halfZ!).
 	m_hGeometryParameters["chamberHeight"] = pChamberHeight ;
   m_hGeometryParameters["XeRadius"] = 76.2 * mm ;
 	
 	// Liquid Xe height.
+	// If liquid Xe surrounded by other layers use dimensions from the messenger.
 	if (pNbrCryostatLayers > 0){
-		// If liquid Xe surrounded by other layers use dimensions from the messenger.
 		if(pXeLiquidLevel < pChamberHeight)
 			m_hGeometryParameters["liquidLevel"] = pXeLiquidLevel ;
 		else
@@ -210,8 +210,8 @@ void XAMSDetectorConstruction::DefineGeometryParameters() {
 		m_hGeometryParameters["liquidLevel"] = 500. * mm ;
 	}
 
-	// Gaseous Xe layer height.
-  m_hGeometryParameters["gXeHeight"] = pChamberHeight - pXeLiquidLevel;	// Total height.
+	// Gaseous Xe layer height; total, not halfZ.
+  m_hGeometryParameters["gXeHeight"] = pChamberHeight - m_hGeometryParameters["liquidLevel"] ;
 }
 
 G4double XAMSDetectorConstruction::GetGeometryParameter(const char *szParameter) {
@@ -310,15 +310,15 @@ void XAMSDetectorConstruction::ConstructChamber() {
 		0.5 * GetGeometryParameter("innerWallHeight") ;
 	const G4double dCryostatInnerWallRadius = ( 
 			GetGeometryParameter("XeRadius")
-			+ GetGeometryParameter("innerWallRadius") ) ;
+			+ GetGeometryParameter("innerWallThickness") ) ;
 	//
   const G4double dGasHalfZ = 0.5 * GetGeometryParameter("gXeHeight") ;
 	const G4double dGasRadius = GetGeometryParameter("XeRadius") ;
   const G4double dLiqHalfZ = 0.5 * GetGeometryParameter("liquidLevel") ;
 	
 	// Positions.
-	const G4double pCryostatInnerWallZ = -50.*mm ;
-	const G4double pGasZ = -.5 * dLiqHalfZ ;
+	const G4double pCryostatInnerWallZ = -26.* mm ;
+	const G4double pGasZ = dLiqHalfZ ;
 
 	// Materials.
   G4Material* Steel = G4Material::GetMaterial("Steel") ;
@@ -360,7 +360,7 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 	const G4double dGasHalfZ = 0.5 * GetGeometryParameter("gXeHeight") ;
 
 	// Position in case of enclosing volumes; otherwise centred in world.
-	const G4double pLiqZ = -.5 * dGasHalfZ ;
+	const G4double pLiqZ = -1. * dGasHalfZ ;
 	
 	// Material.
   G4Material* lXe = G4Material::GetMaterial("G4_lXe") ;
@@ -439,7 +439,7 @@ void XAMSDetectorConstruction::ConstructTpc() {
 			m_pMesh_log,"Mesh",m_pTeflon_log,false,0) ;
 	// Inner lXe.
 	G4Tubs* pTpcLiq_tubs = new G4Tubs("Liq_tubs",0.*cm,
-			dTeflonInnerRadius,1.5 * dTeflonHalfZ,0.*deg,360.*deg) ;
+			dTeflonInnerRadius,.75 * dTeflonHalfZ,0.*deg,360.*deg) ;
 	m_pTpcLiq_log = new G4LogicalVolume(pTpcLiq_tubs,lXe,"InnerLiquidVolume") ;
 	m_pTpcLiq_phys = new G4PVPlacement(0,G4ThreeVector(),m_pTpcLiq_log,
 				"InnerLiquidXenon",m_pTeflon_log,false,0) ;
