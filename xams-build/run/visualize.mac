@@ -4,8 +4,8 @@
 /tracking/verbose 0
 
 /vis/scene/create
-#/vis/open OGLIX
-/vis/open VRML2FILE
+/vis/open OGLIX
+#/vis/open VRML2FILE
 /vis/viewer/set/viewpointThetaPhi 0 0 deg
 /vis/viewer/set/upVector 1 0 0
 /vis/viewer/zoom 1.0

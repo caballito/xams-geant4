@@ -9,13 +9,14 @@
 #include "TFile.h"
 #include "TDirectory.h"
 
-using std::vector;
-using std::map;
+using std::vector ;
+using std::map ;
 
-class G4Colour;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class XAMSDetectorMessenger;
+class G4Colour ;
+class G4LogicalVolume ;
+class G4VPhysicalVolume ;
+class G4PVReplica ;
+class XAMSDetectorMessenger ;
 
 // APC 25-07-2011: for the Klopperboden implementation
 #include <G4UnionSolid.hh>
@@ -86,6 +87,9 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
   	G4VPhysicalVolume* m_pMesh_phys ;
   	G4VPhysicalVolume* m_pTpcLiq_phys ;
   	//G4VPhysicalVolume* m_pPmt_phys ;
+		//
+		// Replica.
+		G4PVReplica* m_pElectrode_rep ;
    
 	  static map<G4String, G4double> m_hGeometryParameters ;
 

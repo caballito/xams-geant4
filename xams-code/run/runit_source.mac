@@ -1,0 +1,20 @@
+/control/verbose 1
+/run/verbose 1
+/event/verbose 1
+/tracking/verbose 0
+/gps/verbose 1
+
+# Random seeding needs good care and administration.
+#
+/run/random/setRandomSeed 12361
+
+# Only a pencil beam shooting in x.
+/gps/direction 1. 0 0
+# Angular distribution.
+#/gps/ang/type iso
+#
+/gps/particle gamma
+/gps/pos/type Point
+# Source at (-30,0,0), roughly centred w.r.t. inner lXe volume.
+/gps/pos/centre -30. 0. 0. cm
+/gps/energy 1000 keV

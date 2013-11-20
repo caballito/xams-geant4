@@ -89,11 +89,11 @@ G4VPhysicalVolume* XAMSDetectorConstruction::Construct() {
 	ConstructLiquid() ;
 	G4cout << " Done." << G4endl ;
 	//
-	if (pNbrCryostatLayers > 0){
+	//if (pNbrCryostatLayers > 0){
 		G4cout << "++ Constructing the TPC..." ;
 		ConstructTpc() ;
 		G4cout << " Done." << G4endl ;
-	}
+	//}
     
   // Info on our geometry.
   //PrintGeometryInformation() ;
@@ -422,13 +422,24 @@ void XAMSDetectorConstruction::ConstructTpc() {
 	m_pTeflon_log = new G4LogicalVolume(pTeflonCyl,Teflon,"TeflonCylinder") ;
 	m_pTeflon_phys = new G4PVPlacement(0,G4ThreeVector(),
 			m_pTeflon_log,"TeflonStructure",m_pLiq_log,false,0) ;
+	//
 	// Electrode(s).
 	G4Tubs* pElectrode = new G4Tubs("Cu_tubs",dElectrodeInnerRadius,
 			dElectrodeOuterRadius,dElectrodeHalfZ,0.*deg,360.*deg) ;
 	m_pElectrode_log = new G4LogicalVolume(pElectrode,Cu,"ElectrodeRing") ;
 	// TODO: Multiply and place evenly over drift length.
 	m_pElectrode_phys = new G4PVPlacement(0,G4ThreeVector(),
-			m_pElectrode_log,"CuRing",m_pTeflon_log,false,0) ;
+			m_pElectrode_log,"CuRing",m_pTeflon_log,false,6) ;
+	// Replicas.
+	/*m_pElectrode_rep = new G4PVReplica("CuRep",	// Name.
+			m_pElectrode_log,	// Logical volume.
+			m_pTeflon_log,	// Mother volume.
+			kXAxis,	// Axis on which the copies are shifted.
+			6,	// Number of replicated volumes.
+			, // Widtch of single replicated volume along axis.
+			0.*mm	// Offset associated to mother offset along axis.
+			) ;*/
+	//
 	// Mesh(es).
 	G4Tubs* pMesh = new G4Tubs("Steel_tubs",0.*cm,
 			dMeshRadius,dMeshHalfZ,0.*deg,360.*deg) ;
@@ -437,6 +448,7 @@ void XAMSDetectorConstruction::ConstructTpc() {
 	m_pMesh_phys = new G4PVPlacement(0,
 			G4ThreeVector(0.*cm,0.*cm,dTeflonHalfZ - 5.*mm),
 			m_pMesh_log,"Mesh",m_pTeflon_log,false,0) ;
+	//
 	// Inner lXe.
 	G4Tubs* pTpcLiq_tubs = new G4Tubs("Liq_tubs",0.*cm,
 			dTeflonInnerRadius,.75 * dTeflonHalfZ,0.*deg,360.*deg) ;
