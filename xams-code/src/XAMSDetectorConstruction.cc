@@ -355,29 +355,43 @@ void XAMSDetectorConstruction::ConstructChamber() {
 //================= Liquid xenon =================
 void XAMSDetectorConstruction::ConstructLiquid() {
 	// Dimensions.
-  const G4double dLiqHalfZ = 0.5 * GetGeometryParameter("liquidLevel") ;
-  const G4double dLiqRadius = GetGeometryParameter("XeRadius") ;
-	const G4double dGasHalfZ = 0.5 * GetGeometryParameter("gXeHeight") ;
+	const G4double dXeDiscHalfZ = 10. * mm ;
+  const G4double dXeCylHalfZ = 0.5 * GetGeometryParameter("liquidLevel") - dXeDiscHalfZ ;
+  const G4double dXeOuterRadius = GetGeometryParameter("XeRadius") ;
+	const G4double dXeInnerRadius = 74. * mm ;
 
 	// Position in case of enclosing volumes; otherwise centred in world.
-	const G4double pLiqZ = -1. * dGasHalfZ ;
+	const G4double dXeDiscZ = -0.5 * GetGeometryParameter("chamberHeight")
+		+ dXeDiscHalfZ ;
+	const G4double dXeCylZ = -0.5 * ( GetGeometryParameter("chamberHeight")
+			- GetGeometryParameter("liquidLevel")) + dXeDiscHalfZ ;
 	
 	// Material.
   G4Material* lXe = G4Material::GetMaterial("G4_lXe") ;
   //G4Material* lXe = G4Material::GetMaterial("liquidXe") ;
 
 	// Volumes.
-	G4Tubs* pLiq_tubs = new G4Tubs("Liq_tubs",0.*cm,
-			dLiqRadius,dLiqHalfZ,0.*deg,360.*deg) ;
-	m_pLiq_log = new G4LogicalVolume(pLiq_tubs,lXe,"LiquidVolume") ;
-	if ( pNbrCryostatLayers > 0 )
-		m_pLiq_phys = new G4PVPlacement(0,
-				G4ThreeVector(0.*cm,0.*cm,pLiqZ),m_pLiq_log,
-				"LiquidXenon",m_pCryostatInnerWall_log,false,0) ;
-	else
-		m_pLiq_phys = new G4PVPlacement(0,
-				G4ThreeVector(),m_pLiq_log,
+	G4Tubs* pLiq_disc = new G4Tubs("Liq_disc",0.*cm,
+			dXeOuterRadius,dXeDiscHalfZ,0.*deg,360.*deg) ;
+	m_pXeDisc_log = new G4LogicalVolume(pLiq_disc,lXe,"LiquidXeDisc") ;
+	//
+	G4Tubs* pLiq_cyl = new G4Tubs("Liq_cyl",dXeInnerRadius,
+			dXeOuterRadius,dXeCylHalfZ,0.*deg,360.*deg) ;
+	m_pXeCyl_log = new G4LogicalVolume(pLiq_cyl,lXe,"LiquidXeCyl") ;
+	//
+	if ( pNbrCryostatLayers > 1 ){
+		m_pXeDisc_phys = new G4PVPlacement(0,
+				G4ThreeVector(0.*cm,0.*cm,dXeDiscZ),m_pXeDisc_log,
+				"LiquidXenonBottom",m_pGas_log,false,0) ;
+		m_pXeCyl_phys = new G4PVPlacement(0,
+				G4ThreeVector(0.*mm,0.*mm,dXeCylZ),m_pXeCyl_log,
+				"LiquidXenonAround",m_pGas_log,false,0) ;
+	}
+	else {
+		m_pXeDisc_phys = new G4PVPlacement(0,
+				G4ThreeVector(),m_pXeDisc_log,
 				"LiquidXenon",m_pLab_log,false,0) ;
+	}
 /*
   // Make the lXe the sensitive detector.
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer() ;
@@ -389,7 +403,8 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 	G4Colour hLiqColor(0,0.4,1.,0) ;
 	G4VisAttributes* pLiqVisAtt = new G4VisAttributes(hLiqColor) ;
 	pLiqVisAtt->SetVisibility(true) ;
-	m_pLiq_log->SetVisAttributes(pLiqVisAtt) ;
+	m_pXeDisc_log->SetVisAttributes(pLiqVisAtt) ;
+	m_pXeCyl_log->SetVisAttributes(pLiqVisAtt) ;
 }
 
 //================= TPC ==========================

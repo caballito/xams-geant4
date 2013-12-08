@@ -67,7 +67,8 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
 		G4LogicalVolume* m_pCryostatOuterWall_log ;
 		G4LogicalVolume* m_pInsulationVacuum_log ;
 		G4LogicalVolume* m_pCryostatInnerWall_log ;
-		G4LogicalVolume* m_pLiq_log ;
+		G4LogicalVolume* m_pXeDisc_log ;
+		G4LogicalVolume* m_pXeCyl_log ;
 		G4LogicalVolume* m_pGas_log ;
 		G4LogicalVolume* m_pTeflonTopDisc_log ;
 		G4LogicalVolume* m_pTeflonBottomDisc_log ;
@@ -83,7 +84,8 @@ class XAMSDetectorConstruction: public G4VUserDetectorConstruction {
   	G4VPhysicalVolume* m_pCryostatOuterWall_phys ;
 		G4VPhysicalVolume* m_pInsulationVacuum_phys ;
   	G4VPhysicalVolume* m_pCryostatInnerWall_phys ;
-  	G4VPhysicalVolume* m_pLiq_phys ;
+  	G4VPhysicalVolume* m_pXeDisc_phys ;
+  	G4VPhysicalVolume* m_pXeCyl_phys ;
   	G4VPhysicalVolume* m_pGas_phys ;
 		G4VPhysicalVolume* m_pTeflonTopDisc_phys ;
 		G4VPhysicalVolume* m_pTeflonBottomDisc_phys ;

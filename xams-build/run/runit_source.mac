@@ -16,5 +16,5 @@
 /gps/particle gamma
 /gps/pos/type Point
 # Source at (-30,0,0), roughly centred w.r.t. inner lXe volume.
-/gps/pos/centre -30. 0. 0. cm
+/gps/pos/centre -30. 0. -10. cm
 /gps/energy 1000 keV
