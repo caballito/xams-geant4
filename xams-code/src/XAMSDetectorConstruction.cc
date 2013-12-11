@@ -411,7 +411,6 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 void XAMSDetectorConstruction::ConstructTpc() {
 	// Dimensions.
 	const G4double dBottomXeHalfZ = 10. * mm ;
-  const G4double dXeCylHalfZ = 0.5 * GetGeometryParameter("liquidLevel") - dBottomXeHalfZ ;
 	const G4double dSteelPlateHalfZ = 1. * mm ;
 	//
 	// Drift length of 8 * 12.5 mm = 100 mm.
@@ -423,7 +422,7 @@ void XAMSDetectorConstruction::ConstructTpc() {
 	G4double dXeHalfZ ;
 	const G4double dLevel = 0.5 * GetGeometryParameter("liquidLevel") - dBottomXeHalfZ
 		- dSteelPlateHalfZ - dTeflonDiscHalfZ ;
-	if ( dLevel < dXeCylHalfZ )
+	if ( dLevel < dTeflonCylHalfZ )
 		dXeHalfZ = dLevel ;
 	else 
 		dXeHalfZ = dTeflonCylHalfZ ;
