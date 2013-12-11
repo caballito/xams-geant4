@@ -413,7 +413,8 @@ void XAMSDetectorConstruction::ConstructTpc() {
 	const G4double dBottomXeHalfZ = 5. * mm ;
 	const G4double dSteelPlateHalfZ = 1. * mm ;
 	//
-	const G4double dTeflonCylHalfZ = 96. * mm ;
+	// Drift length of 8 * 12.5 mm = 100 mm.
+	const G4double dTeflonCylHalfZ = 50. * mm ;
 	const G4double dTeflonDiscHalfZ = 30. * mm ;
 	const G4double dTeflonOuterRadius = 74. * mm ;
 	const G4double dTeflonInnerRadius = 30. * mm ;
