@@ -13,7 +13,7 @@
 # Control over detector parameters.
 #
 # Liquid Xe level in the test chamber.
-/Xe/detector/setLiquidLevel 295. mm
+/Xe/detector/setLiquidLevel 195. mm
 #
 # Number of layers around the lXe volume.
 # 0: only lXe, 1: chamber with gas and inner wall,

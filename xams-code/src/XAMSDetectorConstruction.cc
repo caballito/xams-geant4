@@ -312,7 +312,7 @@ void XAMSDetectorConstruction::ConstructChamber() {
 			GetGeometryParameter("XeRadius")
 			+ GetGeometryParameter("innerWallThickness") ) ;
 	//
-  const G4double dGasHalfZ = 0.5 * GetGeometryParameter("chamerHeight") ;
+  const G4double dGasHalfZ = 0.5 * GetGeometryParameter("chamberHeight") ;
 	const G4double dGasRadius = GetGeometryParameter("XeRadius") ;
   //const G4double dLiqHalfZ = 0.5 * GetGeometryParameter("liquidLevel") ;
 	
@@ -379,19 +379,19 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 			dXeOuterRadius,dXeCylHalfZ,0.*deg,360.*deg) ;
 	m_pXeCyl_log = new G4LogicalVolume(pLiq_cyl,lXe,"LiquidXeCyl") ;
 	//
-	if ( pNbrCryostatLayers > 1 ){
+	//if ( pNbrCryostatLayers > 0 ){
 		m_pXeDisc_phys = new G4PVPlacement(0,
 				G4ThreeVector(0.*cm,0.*cm,dXeDiscZ),m_pXeDisc_log,
 				"LiquidXenonBottom",m_pGas_log,false,0) ;
 		m_pXeCyl_phys = new G4PVPlacement(0,
 				G4ThreeVector(0.*mm,0.*mm,dXeCylZ),m_pXeCyl_log,
 				"LiquidXenonAround",m_pGas_log,false,0) ;
-	}
+	/*}
 	else {
 		m_pXeDisc_phys = new G4PVPlacement(0,
 				G4ThreeVector(),m_pXeDisc_log,
 				"LiquidXenon",m_pLab_log,false,0) ;
-	}
+	}*/
 /*
   // Make the lXe the sensitive detector.
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer() ;
@@ -410,42 +410,45 @@ void XAMSDetectorConstruction::ConstructLiquid() {
 //================= TPC ==========================
 void XAMSDetectorConstruction::ConstructTpc() {
 	// Dimensions.
-	const G4double dBottomXeHalfZ = 5. * mm ;
+	const G4double dBottomXeHalfZ = 10. * mm ;
+  const G4double dXeCylHalfZ = 0.5 * GetGeometryParameter("liquidLevel") - dBottomXeHalfZ ;
 	const G4double dSteelPlateHalfZ = 1. * mm ;
 	//
 	// Drift length of 8 * 12.5 mm = 100 mm.
 	const G4double dTeflonCylHalfZ = 50. * mm ;
-	const G4double dTeflonDiscHalfZ = 30. * mm ;
+	const G4double dTeflonDiscHalfZ = 40. * mm ;
 	const G4double dTeflonOuterRadius = 74. * mm ;
 	const G4double dTeflonInnerRadius = 30. * mm ;
 	//
 	G4double dXeHalfZ ;
 	const G4double dLevel = 0.5 * GetGeometryParameter("liquidLevel") - dBottomXeHalfZ
-		- dSteelPlateHalfZ - dTeflonDiscHalfZ - dTeflonCylHalfZ ;
-	if ( dLevel > 0. * mm ){
+		- dSteelPlateHalfZ - dTeflonDiscHalfZ ;
+	if ( dLevel < dXeCylHalfZ )
 		dXeHalfZ = dLevel ;
-	} else {
+	else 
 		dXeHalfZ = dTeflonCylHalfZ ;
-	}
 	//
 	const G4double dElectrodeHalfZ = 1. * mm ;
 	const G4double dElectrodeOuterRadius = 55. * mm ;
 	const G4double dElectrodeInnerRadius = 45. * mm ;
 	//
-	const G4double dMeshHalfZ = 1. * mm ;
+	const G4double dMeshHalfZ = .8 * mm ;
 	const G4double dMeshRadius = 55. * mm ;
 
 	// Positions.
 	const G4double dSteelPlateZ = -0.5 * GetGeometryParameter("chamberHeight") 
-		+ dBottomXeHalfZ + dSteelPlateHalfZ ;
+		+ 2. * dBottomXeHalfZ + dSteelPlateHalfZ ;
 	const G4double dTeflonBottomDiscZ = -0.5 * GetGeometryParameter("chamberHeight")
-		+ dBottomXeHalfZ + dSteelPlateHalfZ + dTeflonDiscHalfZ ; 
+		+ 2. * dBottomXeHalfZ + 2. * dSteelPlateHalfZ + dTeflonDiscHalfZ ; 
 	const G4double dTeflonCylZ = -0.5 * GetGeometryParameter("chamberHeight")
-		+ dBottomXeHalfZ + dSteelPlateHalfZ + dTeflonDiscHalfZ + dTeflonCylHalfZ ;
+		+ 2. * dBottomXeHalfZ + 2. * dSteelPlateHalfZ + 2. * dTeflonDiscHalfZ
+		+ dTeflonCylHalfZ ;
 	const G4double dTeflonTopDiscZ = -0.5 * GetGeometryParameter("chamberHeight")
-		+ dBottomXeHalfZ + dSteelPlateHalfZ + 2 * dTeflonDiscHalfZ + dTeflonCylHalfZ ;
+		+ 2. * dBottomXeHalfZ + 2. * dSteelPlateHalfZ + 3. * dTeflonDiscHalfZ
+		+ 2. * dTeflonCylHalfZ ;
 	const G4double dXeZ = -0.5 * GetGeometryParameter("chamberHeight")
-		+ dBottomXeHalfZ + dSteelPlateHalfZ + dTeflonDiscHalfZ + dXeHalfZ ;
+		+ 2. * dBottomXeHalfZ + 2. * dSteelPlateHalfZ + 2. * dTeflonDiscHalfZ
+		+ dXeHalfZ ;
 
 	// Material.
 	G4Material* Teflon = G4Material::GetMaterial("G4_TEFLON") ;
@@ -488,8 +491,8 @@ void XAMSDetectorConstruction::ConstructTpc() {
 			dElectrodeOuterRadius,dElectrodeHalfZ,0.*deg,360.*deg) ;
 	m_pElectrode_log = new G4LogicalVolume(pElectrode,Cu,"ElectrodeRing") ;
 	// TODO: Multiply and place evenly over drift length.
-	m_pElectrode_phys = new G4PVPlacement(0,G4ThreeVector(),
-			m_pElectrode_log,"CuRing",m_pTeflonCyl_log,false,6) ;
+	/*m_pElectrode_phys = new G4PVPlacement(0,G4ThreeVector(),
+			m_pElectrode_log,"CuRing",m_pTeflonCyl_log,false,6) ;*/
 	// Replicas.
 	/*m_pElectrode_rep = new G4PVReplica("CuRep",	// Name.
 			m_pElectrode_log,	// Logical volume.
@@ -505,9 +508,9 @@ void XAMSDetectorConstruction::ConstructTpc() {
 			dMeshRadius,dMeshHalfZ,0.*deg,360.*deg) ;
 	m_pMesh_log = new G4LogicalVolume(pMesh,Steel,"SteelMesh") ;
 	// TODO: put at correct height, double and divide into lXe.
-	m_pMesh_phys = new G4PVPlacement(0,
-			G4ThreeVector(0.*cm,0.*cm,dTeflonCylHalfZ - 5.*mm),
-			m_pMesh_log,"Mesh",m_pTeflonCyl_log,false,0) ;
+	/*m_pMesh_phys = new G4PVPlacement(0,
+			G4ThreeVector(0.*cm,0.*cm,-1.*dTeflonCylHalfZ - 5.*mm),
+			m_pMesh_log,"Mesh",m_pTeflonCyl_log,false,0) ;*/
 	//
 	// Inner lXe.
 	G4Tubs* pTpcLiq_tubs = new G4Tubs("Liq_tubs",0.*cm,
@@ -521,6 +524,11 @@ void XAMSDetectorConstruction::ConstructTpc() {
   XAMSSensitiveDetector* pTpcLiq_SD = new XAMSSensitiveDetector("XAMS/lXe") ;
   pSDManager->AddNewDetector(pTpcLiq_SD) ;
   m_pTpcLiq_log->SetSensitiveDetector(pTpcLiq_SD) ;
+	// Visibility attributes.
+	G4Colour hLiqColor(0,0.4,1.,0) ;
+	G4VisAttributes* pLiqVisAtt = new G4VisAttributes(hLiqColor) ;
+	pLiqVisAtt->SetVisibility(true) ;
+	m_pTpcLiq_log->SetVisAttributes(pLiqVisAtt) ;
 
 }
 
